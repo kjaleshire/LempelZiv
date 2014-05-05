@@ -1,0 +1,7 @@
+Testing for the LempelZiv and Trie Java classes:
+
+I experimented with a number of plaintext files using different code sizes and found 12 to be an acceptable mean for compression, especially longer files. During these tests I found a couple of what I considered serious bugs, one of which turned out to be a limitation of the program itself and the other an actual bug.
+
+The actual bug turned out to be a flaw in my handling of the input stream bytes. The InputStream class is designed to return -1 on reaching the end of the file. Originally I had designed the decompression method to stop on reaching this -1 and continue processing any any bits that the code reading method may have already recorded as a new code. This would result in extra character(s) at the end of the uncompressed file. Later I realized that the superfluous bits should theoretically should be zero since they would not have been written to since only the first part of their byte would've been used. A quick change to the code to discard these bits fixed the issue.
+
+I had forgotten about the program's limitation of 26 lowercase characters and space and attempted to process a few "normal" text files. Naturally decompressing each of these resulted in an excess of spaces. I later realized this and stopped searching for some earth-shattering flaw. Theoretically the initial dictionary could be populated with more than 27 unique characters, but this would decrease the compression ratio.
